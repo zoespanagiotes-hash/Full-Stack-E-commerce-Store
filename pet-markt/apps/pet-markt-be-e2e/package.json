@@ -1,0 +1,25 @@
+{
+  "name": "@org/pet-markt-be-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@org/pet-markt-be"
+    ],
+    "targets": {
+      "e2e": {
+        "command": "jest --passWithNoTests",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "dependsOn": [
+          "@org/pet-markt-be:build",
+          "@org/pet-markt-be:serve"
+        ],
+        "options": {
+          "cwd": "apps/pet-markt-be-e2e"
+        }
+      }
+    }
+  }
+}
