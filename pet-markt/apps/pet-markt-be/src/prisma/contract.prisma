@@ -1,21 +1,66 @@
 // use prisma-8
-
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int                        @id @default(autoincrement())
+  email     String                     @unique
   username  String?
   name      String?
   posts     Post[]
-  createdAt TimestamptzString @default(now())
+  createdAt TimestamptzString          @default(now())
   updatedAt temporal.updatedAtString()
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        Int                        @id @default(autoincrement())
   title     String
   content   String?
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User                       @relation(fields: [authorId], references: [id])
   authorId  Int
-  createdAt TimestamptzString @default(now())
+  createdAt TimestamptzString          @default(now())
   updatedAt temporal.updatedAtString()
+}
+
+enum OrderStatus {
+  @@type("pg/text@1")
+  PENDING = "PENDING"
+  PAID = "PAID"
+  SHIPPED = "SHIPPED"
+  DELIVERED = "DELIVERED"
+  CANCELLED = "CANCELLED"
+}
+
+model Product {
+  id            Int                        @id @default(autoincrement())
+  name          String
+  description   String
+  price         Float
+  image         String
+  stripePriceId String
+  isFeatured    Boolean                    @default(false)
+  createdAt     TimestamptzString          @default(now())
+  updatedAt     temporal.updatedAtString()
+}
+
+model Order {
+  id          Int                        @id @default(autoincrement())
+  userId      String
+  status      OrderStatus                @default(PENDING)
+  totalAmount Float
+  paymentId   String?
+  createdAt   TimestamptzString          @default(now())
+  updatedAt   temporal.updatedAtString()
+}
+
+model OrderItem {
+  id        Int                        @id @default(autoincrement())
+  order     Order                      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   Int
+  product   Product                    @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int
+  price     Float
+  createdAt TimestamptzString          @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([orderId])
+  @@index([productId])
 }

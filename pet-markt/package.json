@@ -44,6 +44,9 @@
     "apps/*"
   ],
   "packageManager": "npm@12.1.0",
+  "prisma":{
+    "seed": "npx ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
